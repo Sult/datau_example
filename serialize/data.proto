@@ -1,0 +1,15 @@
+syntax = "proto3";
+package serialize;
+
+// option go_package = "github.com/jibecompany/proxyu/test_client/serialize";
+
+
+message UserData {
+    bytes value = 1;
+    string mime = 2;
+}
+
+message UserInfo {
+    bytes uuid = 1;
+    bytes pubkey = 2;
+}

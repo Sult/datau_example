@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+option go_package = "github.com/ice2heart/proxyu_client/protocol";
+package protocol;
+
+service ProxyUIntegration {
+    rpc Correlation (CorrelationRequest) returns (stream CorrelationResponse);
+    rpc SubmitDocument (SubmitDocumentRequest) returns (SubmitDocumentResponse);
+    rpc Permission (PermissionRequest) returns (stream PermissionResponse);
+    rpc Data (stream DataRequest) returns (stream DataResponse);
+}
+
+message CorrelationRequest {}
+
+message CorrelationResponse {
+    oneof response {
+        string correlation_message = 1;
+        bytes public_key = 2; // 32 bytes ed25519 public key
+    }
+}
+
+message SubmitDocumentRequest {
+    string url = 1;
+    bytes hash = 2; // 32 bytes SHA3-256 hash
+}
+
+message SubmitDocumentResponse {
+    bool ok = 1;
+    string error = 2;
+}
+
+message PermissionRequest {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+    bytes reason = 4; // 16 bytes UUIDv4
+    bytes policy = 5; // 32 bytes SHA3-256 hash
+    uint64 from = 6; // Unix UTC timestamp
+    uint64 until = 7; // Unix UTC timestamp
+    uint32 amount = 8;
+    uint32 level = 9;
+}
+
+message PermissionResponse {
+    oneof response {
+        string permission_message = 1;
+        bool granted = 2;
+    }
+}
+
+message DataField {
+    bytes uuid = 1; // 16 bytes UUIDv4
+    bytes value = 2;
+    string mime = 3;
+}
+
+message DataRetrieveRequest {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+}
+
+message DataRetrieveResponse {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+    sint32 error = 4;
+    repeated DataField fields = 5;
+}
+
+message DataSupplyRequest {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+    bytes value = 4;
+    string mime = 5;
+}
+
+message DataSupplyResponse {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+    sint32 error = 4;
+}
+
+message DataDeleteRequest {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+}
+
+message DataDeleteResponse {
+    bytes public_key = 1; // 32 bytes ed25519 public key
+    bytes data = 2; // 16 bytes UUIDv4
+    bytes process = 3; // 16 bytes UUIDv4
+    sint32 error = 4;
+}
+
+message DataNopRequest {}
+
+message DataRequest {
+    oneof request {
+        DataRetrieveRequest retrieve_request = 1;
+        DataRetrieveResponse retrieve_response = 2;
+        DataSupplyResponse supply_response = 3;
+        DataDeleteResponse delete_response = 4;
+        DataNopRequest nop_request = 5;
+    }
+}
+
+message DataResponse {
+    oneof response {
+        DataRetrieveRequest retrieve_request = 1;
+        DataRetrieveResponse retrieve_response = 2;
+        DataSupplyRequest supply_request = 3;
+        DataDeleteRequest delete_request = 4;
+    }
+}

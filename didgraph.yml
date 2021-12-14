@@ -1,0 +1,21 @@
+didgraph:
+  - key: ab493ade-2f3f-11eb-a11b-23fff9ac0d99
+    mime: text/plain; charset=UTF-8
+    description: first name
+  - key: f186cc78-2f3f-11eb-95f4-33ca3287f82f
+    mime: text/plain; charset=UTF-8
+    description: birth names
+  - key: f880ae36-2f3f-11eb-ae0e-f38ce2d27161
+    mime: text/plain; charset=UTF-8
+    description: last name prefix
+  - key: fe06b45e-2f3f-11eb-8728-53ed1b3e7429
+    mime: text/plain; charset=UTF-8
+    description: last name
+  - key: 046b6b3c-2f40-11eb-9efd-4b5bbd4023e7
+    mime: application/datau+node
+    description: name
+    children:
+      - ab493ade-2f3f-11eb-a11b-23fff9ac0d99
+      - f186cc78-2f3f-11eb-95f4-33ca3287f82f
+      - f880ae36-2f3f-11eb-ae0e-f38ce2d27161
+      - fe06b45e-2f3f-11eb-8728-53ed1b3e7429
